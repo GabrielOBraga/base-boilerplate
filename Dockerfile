@@ -34,8 +34,6 @@ COPY backend/ .
 # Copy frontend build output
 COPY --from=frontend-builder /app/frontend/.next /app/frontend/.next
 COPY --from=frontend-builder /app/frontend/public /app/frontend/public
-COPY --from=frontend-builder /app/frontend/package.json /app/frontend/package.json
-COPY --from=frontend-builder /app/frontend/next.config.js /app/frontend/next.config.js
 
 EXPOSE 8000
 
