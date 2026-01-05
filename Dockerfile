@@ -33,7 +33,6 @@ COPY backend/ .
 
 # Copy frontend build output
 COPY --from=frontend-builder /app/frontend/.next /app/frontend/.next
-COPY --from=frontend-builder /app/frontend/public /app/frontend/public
 
 EXPOSE 8000
 
