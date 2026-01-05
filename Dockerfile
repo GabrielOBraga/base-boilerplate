@@ -22,6 +22,8 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     gcc \
+    nginx \
+    supervisor \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy and install Python dependencies
@@ -34,8 +36,15 @@ COPY backend/ .
 # Copy frontend build output
 COPY --from=frontend-builder /app/frontend/.next /app/frontend/.next
 
-ENV PORT=${PORT:-8000}
+# Copy nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 3000 8000
+# Copy supervisor config
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-CMD ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+# Create directories for supervisor logs and gunicorn
+RUN mkdir -p /var/log/supervisor
+
+EXPOSE 80
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
