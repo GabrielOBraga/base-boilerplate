@@ -43,8 +43,9 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Copy supervisor config
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Create directories for supervisor logs
-RUN mkdir -p /var/log/supervisor /var/www/frontend
+# Create directories for supervisor logs and frontend files
+RUN mkdir -p /var/log/supervisor /var/www/frontend && \
+    nginx -t
 
 EXPOSE 80
 
