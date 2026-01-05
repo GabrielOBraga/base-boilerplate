@@ -1,0 +1,12 @@
+django>=4.2,<5.0
+djangorestframework
+django-cors-headers
+djangorestframework-simplejwt
+dj-database-url
+psycopg2-binary
+drf-spectacular
+pytest
+pytest-django
+flake8
+black
+python-dotenv
