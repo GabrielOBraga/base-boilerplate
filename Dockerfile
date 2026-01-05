@@ -36,7 +36,6 @@ COPY backend/ .
 # Copy frontend build output - serve as static files
 COPY --from=frontend-builder /app/frontend/.next/static /var/www/frontend/static
 COPY --from=frontend-builder /app/frontend/.next/server /var/www/frontend/server
-COPY --from=frontend-builder /app/frontend/public /var/www/frontend/public
 
 # Copy nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
