@@ -18,7 +18,7 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies (nginx + supervisor only, no node needed)
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     gcc \
@@ -33,8 +33,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy backend code
 COPY backend/ .
 
-# Copy frontend build output
-COPY --from=frontend-builder /app/frontend/.next /app/frontend/.next
+# Copy frontend build output - serve as static files
+COPY --from=frontend-builder /app/frontend/.next/static /var/www/frontend/static
+COPY --from=frontend-builder /app/frontend/.next/server /var/www/frontend/server
+COPY --from=frontend-builder /app/frontend/public /var/www/frontend/public
 
 # Copy nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
@@ -42,8 +44,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Copy supervisor config
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Create directories for supervisor logs and gunicorn
-RUN mkdir -p /var/log/supervisor
+# Create directories for supervisor logs
+RUN mkdir -p /var/log/supervisor /var/www/frontend
 
 EXPOSE 80
 
